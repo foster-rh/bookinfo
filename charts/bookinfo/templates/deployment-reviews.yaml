@@ -28,6 +28,10 @@ spec:
           value: "/tmp/logs"
         ports:
         - containerPort: 9080
+        {{- with .Values.reviews.v1.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - name: tmp
           mountPath: /tmp
@@ -70,6 +74,10 @@ spec:
           value: "/tmp/logs"
         ports:
         - containerPort: 9080
+        {{- with .Values.reviews.v2.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - name: tmp
           mountPath: /tmp
@@ -112,6 +120,10 @@ spec:
           value: "/tmp/logs"
         ports:
         - containerPort: 9080
+        {{- with .Values.reviews.v3.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - name: tmp
           mountPath: /tmp

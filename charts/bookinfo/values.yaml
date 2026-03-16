@@ -7,25 +7,67 @@ ambient:
 productpage:
   replicas: 1
   image: docker.io/istio/examples-bookinfo-productpage-v1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 details:
   replicas: 1
   image: docker.io/istio/examples-bookinfo-details-v1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 ratings:
   replicas: 1
   image: docker.io/istio/examples-bookinfo-ratings-v1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 reviews:
   v1:
     enabled: true
     replicas: 1
     image: docker.io/istio/examples-bookinfo-reviews-v1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
   v2:
     enabled: true
     replicas: 1
     image: docker.io/istio/examples-bookinfo-reviews-v2
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
   v3:
     enabled: true
     replicas: 1
     image: docker.io/istio/examples-bookinfo-reviews-v3
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi

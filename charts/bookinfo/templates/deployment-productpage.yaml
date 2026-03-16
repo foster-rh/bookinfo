@@ -28,6 +28,10 @@ spec:
         imagePullPolicy: {{ .Values.imagePullPolicy }}
         ports:
         - containerPort: 9080
+        {{- with .Values.productpage.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - name: tmp
           mountPath: /tmp
