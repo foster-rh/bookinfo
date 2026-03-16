@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: bookinfo-applicationset
-  namespace: openshift-gitops
+  namespace: istio-demo-team
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
 spec:
@@ -24,19 +24,19 @@ spec:
   template:
     metadata:
       name: '{{name}}-bookinfo'
-      namespace: openshift-gitops
+      namespace: istio-demo-team
       annotations:
         apps.open-cluster-management.io/ocm-managed-cluster: '{{name}}'
-        apps.open-cluster-management.io/ocm-managed-cluster-app-namespace: openshift-gitops
+        apps.open-cluster-management.io/ocm-managed-cluster-app-namespace: istio-demo-team
         argocd.argoproj.io/compare-options: IgnoreExtraneous
         argocd.argoproj.io/skip-reconcile: "true"
       labels:
         apps.open-cluster-management.io/pull-to-ocm-managed-cluster: "true"
     spec:
       destination:
-        namespace: bookinfo
+        namespace: istio-demo
         server: https://kubernetes.default.svc
-      project: default
+      project: istio-demo-project
       sources:
       - repoURL: https://github.com/foster-rh/bookinfo.git
         targetRevision: HEAD
