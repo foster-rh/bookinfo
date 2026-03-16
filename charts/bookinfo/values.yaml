@@ -1,0 +1,31 @@
+imageVersion: "1.20.3"
+imagePullPolicy: IfNotPresent
+
+ambient:
+  enabled: true
+
+productpage:
+  replicas: 1
+  image: docker.io/istio/examples-bookinfo-productpage-v1
+
+details:
+  replicas: 1
+  image: docker.io/istio/examples-bookinfo-details-v1
+
+ratings:
+  replicas: 1
+  image: docker.io/istio/examples-bookinfo-ratings-v1
+
+reviews:
+  v1:
+    enabled: true
+    replicas: 1
+    image: docker.io/istio/examples-bookinfo-reviews-v1
+  v2:
+    enabled: true
+    replicas: 1
+    image: docker.io/istio/examples-bookinfo-reviews-v2
+  v3:
+    enabled: true
+    replicas: 1
+    image: docker.io/istio/examples-bookinfo-reviews-v3
