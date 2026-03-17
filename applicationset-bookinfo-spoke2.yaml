@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bookinfo-spoke2-applicationset
+  namespace: istio-demo-team
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+spec:
+  generators:
+  - matrix:
+      generators:
+      - clusterDecisionResource:
+          configMapRef: acm-placement-dev-spoke-2
+          labelSelector:
+            matchLabels:
+              cluster.open-cluster-management.io/placement: dev-spoke-2
+          requeueAfterSeconds: 10
+      - clusters:
+          selector:
+            matchLabels:
+              argocd.argoproj.io/secret-type: cluster
+          values:
+            environment: '{{metadata.labels.environment}}'
+  template:
+    metadata:
+      name: '{{name}}-bookinfo'
+      namespace: istio-demo-team
+      annotations:
+        apps.open-cluster-management.io/ocm-managed-cluster: '{{name}}'
+        apps.open-cluster-management.io/ocm-managed-cluster-app-namespace: istio-demo-team
+        argocd.argoproj.io/compare-options: IgnoreExtraneous
+        argocd.argoproj.io/skip-reconcile: "true"
+      labels:
+        apps.open-cluster-management.io/pull-to-ocm-managed-cluster: "true"
+    spec:
+      destination:
+        namespace: istio-demo
+        server: https://kubernetes.default.svc
+      project: istio-demo-project
+      sources:
+      - repoURL: https://github.com/foster-rh/bookinfo.git
+        targetRevision: HEAD
+        path: charts/bookinfo
+        helm:
+          values: |
+            productpage:
+              replicas: 1
+            details:
+              replicas: 1
+            ratings:
+              replicas: 1
+            reviews:
+              v1:
+                replicas: 1
+              v2:
+                replicas: 1
+              v3:
+                replicas: 1
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        syncOptions:
+        - ApplyOutOfSyncOnly=true
+        - CreateNamespace=true
