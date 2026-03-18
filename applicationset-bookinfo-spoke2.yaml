@@ -50,18 +50,18 @@ spec:
             skupper:
               enabled: true
             productpage:
-              replicas: 1
+              replicas: 0
             details:
-              replicas: 1
+              replicas: 0
             ratings:
-              replicas: 1
+              replicas: 0
             reviews:
               v1:
-                replicas: 1
+                replicas: 0
               v2:
-                replicas: 1
+                replicas: 0
               v3:
-                replicas: 1
+                replicas: 0
       syncPolicy:
         automated:
           prune: false
