@@ -4,10 +4,10 @@
 apiVersion: skupper.io/v2alpha1
 kind: Listener
 metadata:
-  name: {{ .name }}-remote
+  name: {{ .name }}
 spec:
   routingKey: {{ .name }}
-  host: {{ .name }}-remote
+  host: {{ .name }}
   port: {{ .port }}
 {{- end }}
 {{- end }}
