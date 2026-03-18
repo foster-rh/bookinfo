@@ -7,7 +7,9 @@ metadata:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
 spec:
   generators:
-  - matrix:
+  - merge:
+      mergeKeys:
+        - name
       generators:
       - clusterDecisionResource:
           configMapRef: acm-placement-dev-spoke-2
