@@ -1,0 +1,13 @@
+{{- if .Values.skupper.enabled }}
+{{- range .Values.skupper.services }}
+---
+apiVersion: skupper.io/v2alpha1
+kind: Connector
+metadata:
+  name: {{ .name }}
+spec:
+  routingKey: {{ .name }}
+  selector: {{ .selector }}
+  port: {{ .port }}
+{{- end }}
+{{- end }}

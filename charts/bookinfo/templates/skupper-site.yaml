@@ -1,0 +1,18 @@
+{{- if .Values.skupper.enabled }}
+apiVersion: skupper.io/v2alpha1
+kind: Site
+metadata:
+  name: skupper-site
+spec:
+  linkAccess: {{ .Values.skupper.site.linkAccess }}
+---
+{{- if eq .Values.skupper.site.linkAccess "default" }}
+apiVersion: skupper.io/v2alpha1
+kind: AccessGrant
+metadata:
+  name: skupper-grant
+spec:
+  redemptionsAllowed: 10
+  expirationWindow: 60m
+{{- end }}
+{{- end }}

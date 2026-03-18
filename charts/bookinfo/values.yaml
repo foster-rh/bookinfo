@@ -71,3 +71,26 @@ reviews:
       limits:
         cpu: 200m
         memory: 256Mi
+
+gateway:
+  enabled: false
+  name: istio-ingress
+  namespace: istio-system
+
+skupper:
+  enabled: false
+  site:
+    linkAccess: default
+  services:
+    - name: productpage
+      port: 9080
+      selector: app=productpage
+    - name: details
+      port: 9080
+      selector: app=details
+    - name: ratings
+      port: 9080
+      selector: app=ratings
+    - name: reviews
+      port: 9080
+      selector: app=reviews

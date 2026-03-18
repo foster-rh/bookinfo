@@ -43,6 +43,10 @@ spec:
         path: charts/bookinfo
         helm:
           values: |
+            gateway:
+              enabled: true
+            skupper:
+              enabled: true
             productpage:
               replicas: 1
             details:
