@@ -49,6 +49,10 @@ spec:
               enabled: true
             skupper:
               enabled: true
+            connectivityLink:
+              enabled: true
+              dns:
+                weight: 0
             productpage:
               replicas: 0
             details:
