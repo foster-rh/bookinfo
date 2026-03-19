@@ -49,19 +49,23 @@ spec:
               enabled: true
             skupper:
               enabled: true
+            connectivityLink:
+              enabled: true
+              dns:
+                weight: 0
             productpage:
-              replicas: 0
+              replicas: 1
             details:
-              replicas: 0
+              replicas: 1
             ratings:
-              replicas: 0
+              replicas: 1
             reviews:
               v1:
-                replicas: 0
+                replicas: 1
               v2:
-                replicas: 0
+                replicas: 1
               v3:
-                replicas: 0
+                replicas: 1
       syncPolicy:
         automated:
           prune: false

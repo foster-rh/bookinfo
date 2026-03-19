@@ -86,6 +86,27 @@ gateway:
   name: istio-ingress
   namespace: istio-system
 
+connectivityLink:
+  enabled: false
+  gateway:
+    name: istio-ingress
+    namespace: istio-system
+  dns:
+    providerSecret: aws-credentials
+    weight: 100
+    geo: GEO-AP
+    defaultGeo: true
+    healthCheck:
+      path: /productpage
+      port: 443
+      protocol: HTTPS
+      interval: 1m
+      failureThreshold: 3
+  tls:
+    issuerName: letsencrypt-production
+    issuerKind: ClusterIssuer
+    issuerGroup: cert-manager.io
+
 skupper:
   enabled: false
   site:

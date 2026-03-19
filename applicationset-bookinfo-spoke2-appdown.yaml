@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: bookinfo-applicationset
+  name: bookinfo-spoke2-applicationset
   namespace: istio-demo-team
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -12,10 +12,10 @@ spec:
         - name
       generators:
       - clusterDecisionResource:
-          configMapRef: acm-placement-dev-spoke-1
+          configMapRef: acm-placement-dev-spoke-2
           labelSelector:
             matchLabels:
-              cluster.open-cluster-management.io/placement: dev-spoke-1
+              cluster.open-cluster-management.io/placement: dev-spoke-2
           requeueAfterSeconds: 10
       - clusters:
           selector:
@@ -49,23 +49,19 @@ spec:
               enabled: true
             skupper:
               enabled: true
-            connectivityLink:
-              enabled: true
-              dns:
-                weight: 100
             productpage:
-              replicas: 1
+              replicas: 0
             details:
-              replicas: 1
+              replicas: 0
             ratings:
-              replicas: 1
+              replicas: 0
             reviews:
               v1:
-                replicas: 1
+                replicas: 0
               v2:
-                replicas: 1
+                replicas: 0
               v3:
-                replicas: 1
+                replicas: 0
       syncPolicy:
         automated:
           prune: false
