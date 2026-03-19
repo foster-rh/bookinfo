@@ -98,8 +98,8 @@ connectivityLink:
     defaultGeo: true
     healthCheck:
       path: /productpage
-      port: 443
-      protocol: HTTPS
+      port: 80
+      protocol: HTTP
       interval: 1m
       failureThreshold: 3
   tls:
