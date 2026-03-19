@@ -94,7 +94,7 @@ connectivityLink:
   dns:
     providerSecret: aws-credentials
     weight: 100
-    geo: OC
+    geo: GEO-OC
     defaultGeo: true
     healthCheck:
       path: /productpage
