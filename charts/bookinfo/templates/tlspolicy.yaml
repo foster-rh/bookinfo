@@ -3,6 +3,7 @@ apiVersion: kuadrant.io/v1
 kind: TLSPolicy
 metadata:
   name: bookinfo-tls
+  namespace: {{ .Values.connectivityLink.gateway.namespace }}
   annotations:
     argocd.argoproj.io/sync-wave: "5"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -11,7 +12,6 @@ spec:
     group: gateway.networking.k8s.io
     kind: Gateway
     name: {{ .Values.connectivityLink.gateway.name }}
-    namespace: {{ .Values.connectivityLink.gateway.namespace }}
   issuerRef:
     group: {{ .Values.connectivityLink.tls.issuerGroup }}
     kind: {{ .Values.connectivityLink.tls.issuerKind }}

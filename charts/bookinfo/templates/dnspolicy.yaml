@@ -3,6 +3,7 @@ apiVersion: kuadrant.io/v1
 kind: DNSPolicy
 metadata:
   name: bookinfo-dns
+  namespace: {{ .Values.connectivityLink.gateway.namespace }}
   annotations:
     argocd.argoproj.io/sync-wave: "5"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -11,7 +12,6 @@ spec:
     group: gateway.networking.k8s.io
     kind: Gateway
     name: {{ .Values.connectivityLink.gateway.name }}
-    namespace: {{ .Values.connectivityLink.gateway.namespace }}
   providerRefs:
     - name: {{ .Values.connectivityLink.dns.providerSecret }}
   healthCheck:
@@ -20,7 +20,6 @@ spec:
     path: {{ .Values.connectivityLink.dns.healthCheck.path }}
     port: {{ .Values.connectivityLink.dns.healthCheck.port }}
     protocol: {{ .Values.connectivityLink.dns.healthCheck.protocol }}
-    allowInsecureCertificate: true
   loadBalancing:
     defaultGeo: {{ .Values.connectivityLink.dns.defaultGeo }}
     geo: {{ .Values.connectivityLink.dns.geo }}
