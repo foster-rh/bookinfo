@@ -47,6 +47,8 @@ spec:
           values: |
             gateway:
               enabled: true
+              route:
+                enabled: true
             skupper:
               enabled: true
             connectivityLink:

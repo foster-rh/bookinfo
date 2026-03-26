@@ -85,9 +85,17 @@ gateway:
   enabled: false
   name: istio-ingress
   namespace: istio-system
+  serviceType: ClusterIP
+  listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
+  route:
+    enabled: false
 
 connectivityLink:
   enabled: false
+  hostname: bookinfo.spoke.aws-apac.mobb.cloud
   gateway:
     name: istio-ingress
     namespace: istio-system
@@ -103,6 +111,7 @@ connectivityLink:
       interval: 1m
       failureThreshold: 3
   tls:
+    secretName: shared-app-gw-tls
     issuerName: letsencrypt-production
     issuerKind: ClusterIssuer
     issuerGroup: cert-manager.io
