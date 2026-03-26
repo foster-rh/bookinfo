@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scenario 3 - Bookinfo app team brings down the first of their microservices on spoke 1</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #08090d;
+    --surface: #0e1017;
+    --panel: #161923;
+    --border: #232838;
+    --red: #e00;
+    --cyan: #22d3ee;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --purple: #a78bfa;
+    --white: #e2e8f0;
+    --muted: #64748b;
+    --blue: #60a5fa;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+  .header {
+    text-align: center;
+    padding: 30px 20px 15px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--red) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header p {
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  svg { display: block; margin: 0 auto; }
+  .flow { stroke-dasharray: 10 5; animation: dash 1.5s linear infinite; }
+  .flow-rev { stroke-dasharray: 10 5; animation: dash-rev 1.5s linear infinite; }
+  @keyframes dash { to { stroke-dashoffset: -30; } }
+  @keyframes dash-rev { to { stroke-dashoffset: 30; } }
+  .pulse { animation: pa 2s ease-in-out infinite; }
+  @keyframes pa { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
+  .legend {
+    display: flex; justify-content: center; gap: 28px; padding: 14px 20px; flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);
+  }
+  .legend-line { width: 28px; height: 4px; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Scenario 3 - First Microservice Down on Spoke 1</h1>
+  <p>Bookinfo app team brings down the first of their microservices on spoke 1</p>
+</div>
+
+  <svg viewBox="0 0 1100 820" width="1100" height="820" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a-cyan" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#22d3ee"/></marker>
+    <marker id="a-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#e00"/></marker>
+    <marker id="a-amber" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#fbbf24"/></marker>
+    <marker id="a-purple" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#a78bfa"/></marker>
+    <marker id="a-blue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#60a5fa"/></marker>
+    <marker id="a-green" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#34d399"/></marker>
+    <marker id="a-white" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#94a3b8"/></marker>
+  </defs>
+
+  <!-- ==================== BOOKINFO REPO ==================== -->
+  <g transform="translate(20, 55)">
+    <rect x="0" y="0" width="150" height="60" rx="8" fill="var(--panel)" stroke="var(--muted)" stroke-width="2"/>
+    <text x="75" y="28" text-anchor="middle" fill="var(--white)" font-family="DM Sans" font-size="13" font-weight="700">Bookinfo Repo</text>
+    <text x="75" y="46" text-anchor="middle" fill="var(--muted)" font-family="JetBrains Mono" font-size="9">GitHub</text>
+  </g>
+
+  <!-- Repo -> Hub -->
+  <path d="M 170 85 L 248 85" stroke="#94a3b8" stroke-width="3" fill="none" class="flow" marker-end="url(#a-white)"/>
+  <text x="209" y="78" text-anchor="middle" fill="var(--muted)" font-family="JetBrains Mono" font-size="9">deploy</text>
+
+  <!-- ==================== HUB CLUSTER ==================== -->
+  <g transform="translate(260, 20)">
+    <rect x="0" y="0" width="580" height="130" rx="10" fill="var(--surface)" stroke="var(--red)" stroke-width="2"/>
+    <text x="290" y="26" text-anchor="middle" fill="var(--red)" font-family="DM Sans" font-size="16" font-weight="700">dev-hub-1 (ROSA HCP)</text>
+
+    <!-- istio-demo-team namespace -->
+    <rect x="20" y="40" width="540" height="75" rx="6" fill="var(--panel)" stroke="var(--border)" stroke-width="1.5"/>
+    <text x="40" y="60" fill="var(--cyan)" font-family="JetBrains Mono" font-size="10" font-weight="600">ns: istio-demo-team</text>
+
+    <rect x="35" y="72" width="240" height="32" rx="5" fill="var(--surface)" stroke="var(--red)" stroke-width="1.5"/>
+    <text x="155" y="93" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="10">AppSet: bookinfo-spoke1</text>
+
+    <rect x="295" y="72" width="240" height="32" rx="5" fill="var(--surface)" stroke="var(--red)" stroke-width="1.5"/>
+    <text x="415" y="93" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="10">AppSet: bookinfo-spoke2</text>
+  </g>
+
+  <!-- ==================== DYNAMIC DNS ==================== -->
+  <g transform="translate(380, 170)">
+    <rect x="0" y="0" width="340" height="68" rx="8" fill="var(--panel)" stroke="var(--amber)" stroke-width="2"/>
+    <text x="170" y="18" text-anchor="middle" fill="var(--amber)" font-family="DM Sans" font-size="13" font-weight="700">Dynamic DNS (Route 53)</text>
+    <text x="170" y="36" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="10">Connectivity Link</text>
+    <text x="170" y="56" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="11" font-weight="600">bookinfo.spoke.aws-apac.mobb.cloud</text>
+  </g>
+
+  <!-- ==================== Hub -> Spoke-1 (deploy) ==================== -->
+  <path d="M 415 150 Q 340 220 300 270" stroke="var(--red)" stroke-width="3" fill="none" class="flow" marker-end="url(#a-red)"/>
+  <text x="330" y="220" fill="var(--red)" font-family="JetBrains Mono" font-size="10" font-weight="600">deploy</text>
+
+  <!-- ==================== Hub -> Spoke-2 (deploy) ==================== -->
+  <path d="M 685 150 Q 760 220 800 270" stroke="var(--red)" stroke-width="3" fill="none" class="flow" marker-end="url(#a-red)"/>
+  <text x="760" y="220" fill="var(--red)" font-family="JetBrains Mono" font-size="10" font-weight="600">deploy</text>
+
+  <!-- ==================== DNS -> Spoke-1 ONLY (weight: 100) ==================== -->
+  <path d="M 460 238 Q 370 265 300 285" stroke="var(--amber)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-amber)"/>
+  <text x="360" y="258" fill="var(--amber)" font-family="JetBrains Mono" font-size="10" font-weight="700">weight: 100</text>
+
+  <!-- Spoke-2 weight: 0 (no traffic) -->
+  <path d="M 640 238 Q 730 265 800 285" stroke="var(--muted)" stroke-width="2" fill="none" opacity="0.2"/>
+  <text x="750" y="258" fill="var(--muted)" font-family="JetBrains Mono" font-size="10" font-weight="600" opacity="0.4">weight: 0</text>
+
+  <!-- ==================== DIRECT TRAFFIC ==================== -->
+  <!-- Direct -> Spoke-1 -->
+  <path d="M 60 145 Q 60 300 98 322" stroke="var(--blue)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-blue)"/>
+  <rect x="10" y="190" width="100" height="28" rx="5" fill="var(--panel)" stroke="var(--blue)" stroke-width="2"/>
+  <text x="60" y="208" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="10" font-weight="700">Direct curl</text>
+  <text x="60" y="240" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="8" font-weight="600">spoke-1</text>
+
+  <!-- Direct -> Spoke-2 -->
+  <path d="M 1050 145 Q 1050 300 1002 322" stroke="var(--green)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-green)"/>
+  <rect x="1000" y="190" width="100" height="28" rx="5" fill="var(--panel)" stroke="var(--green)" stroke-width="2"/>
+  <text x="1050" y="208" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="10" font-weight="700">Direct curl</text>
+  <text x="1050" y="240" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="8" font-weight="600">spoke-2</text>
+
+  <!-- ==================== SPOKE-1 CLUSTER ==================== -->
+  <g transform="translate(100, 280)">
+    <rect x="0" y="0" width="440" height="500" rx="10" fill="var(--surface)" stroke="var(--cyan)" stroke-width="2"/>
+    <text x="220" y="26" text-anchor="middle" fill="var(--cyan)" font-family="DM Sans" font-size="15" font-weight="700">dev-spoke-1 (ROSA HCP)</text>
+
+    <!-- NLB -->
+    <rect x="15" y="42" width="410" height="42" rx="6" fill="var(--panel)" stroke="var(--green)" stroke-width="2"/>
+    <text x="220" y="68" text-anchor="middle" fill="var(--green)" font-family="DM Sans" font-size="12" font-weight="700">AWS NLB</text>
+
+    <!-- Istio Gateway -->
+    <rect x="15" y="96" width="410" height="42" rx="6" fill="var(--panel)" stroke="var(--cyan)" stroke-width="2"/>
+    <text x="220" y="122" text-anchor="middle" fill="var(--cyan)" font-family="JetBrains Mono" font-size="12" font-weight="600">Istio Gateway (istio-ingress)</text>
+
+    <!-- istio-demo namespace -->
+    <rect x="15" y="150" width="410" height="335" rx="6" fill="#0c0e15" stroke="var(--cyan)" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <text x="30" y="170" fill="var(--cyan)" font-family="JetBrains Mono" font-size="11" font-weight="600">ns: istio-demo</text>
+
+    <!-- Bookinfo pods (NO reviews) -->
+    <rect x="30" y="182" width="185" height="160" rx="6" fill="var(--panel)" stroke="var(--white)" stroke-width="1.5"/>
+    <text x="122" y="204" text-anchor="middle" fill="var(--white)" font-family="DM Sans" font-size="12" font-weight="700">Bookinfo Pods</text>
+
+    <rect x="42" y="215" width="78" height="26" rx="4" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+    <text x="81" y="232" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="9">productpage</text>
+
+    <!-- reviews REMOVED -->
+    <rect x="128" y="215" width="78" height="26" rx="4" fill="var(--surface)" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.4"/>
+    <text x="167" y="229" text-anchor="middle" fill="var(--red)" font-family="JetBrains Mono" font-size="8" opacity="0.6">reviews</text>
+    <text x="167" y="239" text-anchor="middle" fill="var(--red)" font-family="JetBrains Mono" font-size="7" opacity="0.6">(removed)</text>
+
+    <rect x="42" y="249" width="78" height="26" rx="4" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+    <text x="81" y="266" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="9">details</text>
+
+    <rect x="128" y="249" width="78" height="26" rx="4" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+    <text x="167" y="266" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="9">ratings</text>
+
+    <rect x="42" y="285" width="164" height="22" rx="3" fill="var(--surface)" stroke="var(--cyan)" stroke-width="0.5" opacity="0.6"/>
+    <text x="124" y="300" text-anchor="middle" fill="var(--cyan)" font-family="JetBrains Mono" font-size="8" opacity="0.7">ztunnel (ambient mesh)</text>
+
+    <!-- SI -->
+    <rect x="230" y="182" width="180" height="160" rx="6" fill="var(--panel)" stroke="var(--purple)" stroke-width="1.5"/>
+    <text x="320" y="204" text-anchor="middle" fill="var(--purple)" font-family="DM Sans" font-size="11" font-weight="700">Service Interconnect</text>
+
+    <rect x="242" y="234" width="156" height="26" rx="4" fill="var(--surface)" stroke="var(--purple)" stroke-width="1"/>
+    <text x="320" y="252" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="9">skupper-router pod</text>
+
+    <rect x="242" y="268" width="156" height="26" rx="4" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+    <text x="320" y="286" text-anchor="middle" fill="var(--muted)" font-family="JetBrains Mono" font-size="8">Listeners + Connectors</text>
+
+    <text x="320" y="318" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="9" font-weight="600">:9080</text>
+
+    <!-- ===== TRAFFIC: DNS (amber) NLB -> Gateway -> SI ===== -->
+    <line x1="180" y1="42" x2="180" y2="52" stroke="var(--amber)" stroke-width="4" class="flow"/>
+    <line x1="180" y1="84" x2="180" y2="94" stroke="var(--amber)" stroke-width="4" class="flow" marker-end="url(#a-amber)"/>
+    <path d="M 180 138 L 320 182" stroke="var(--amber)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-amber)"/>
+    <!-- amber: SI -> local pods (productpage etc) -->
+    <path d="M 320 260 L 122 182" stroke="var(--amber)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-amber)"/>
+
+    <!-- ===== TRAFFIC: Direct (blue) NLB -> Gateway -> SI ===== -->
+    <line x1="260" y1="42" x2="260" y2="52" stroke="var(--blue)" stroke-width="4" class="flow"/>
+    <line x1="260" y1="84" x2="260" y2="94" stroke="var(--blue)" stroke-width="4" class="flow" marker-end="url(#a-blue)"/>
+    <path d="M 260 138 L 320 182" stroke="var(--blue)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-blue)"/>
+    <!-- blue: SI -> local pods (productpage etc) -->
+    <path d="M 305 260 L 122 195" stroke="var(--blue)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-blue)"/>
+  </g>
+
+  <!-- ==================== SPOKE-2 CLUSTER ==================== -->
+  <g transform="translate(560, 280)">
+    <rect x="0" y="0" width="440" height="500" rx="10" fill="var(--surface)" stroke="var(--cyan)" stroke-width="2"/>
+    <text x="220" y="26" text-anchor="middle" fill="var(--cyan)" font-family="DM Sans" font-size="15" font-weight="700">dev-spoke-2 (ROSA HCP)</text>
+
+    <!-- NLB -->
+    <rect x="15" y="42" width="410" height="42" rx="6" fill="var(--panel)" stroke="var(--green)" stroke-width="2"/>
+    <text x="220" y="68" text-anchor="middle" fill="var(--green)" font-family="DM Sans" font-size="12" font-weight="700">AWS NLB</text>
+
+    <!-- Istio Gateway -->
+    <rect x="15" y="96" width="410" height="42" rx="6" fill="var(--panel)" stroke="var(--cyan)" stroke-width="2"/>
+    <text x="220" y="122" text-anchor="middle" fill="var(--cyan)" font-family="JetBrains Mono" font-size="12" font-weight="600">Istio Gateway (istio-ingress)</text>
+
+    <!-- istio-demo namespace -->
+    <rect x="15" y="150" width="410" height="335" rx="6" fill="#0c0e15" stroke="var(--cyan)" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <text x="30" y="170" fill="var(--cyan)" font-family="JetBrains Mono" font-size="11" font-weight="600">ns: istio-demo</text>
+
+    <!-- SI (inside, left) -->
+    <rect x="30" y="182" width="180" height="160" rx="6" fill="var(--panel)" stroke="var(--purple)" stroke-width="1.5"/>
+    <text x="120" y="204" text-anchor="middle" fill="var(--purple)" font-family="DM Sans" font-size="11" font-weight="700">Service Interconnect</text>
+
+    <rect x="42" y="224" width="156" height="26" rx="4" fill="var(--surface)" stroke="var(--purple)" stroke-width="1"/>
+    <text x="120" y="242" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="9">skupper-router pod</text>
+
+    <rect x="42" y="258" width="156" height="26" rx="4" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+    <text x="120" y="276" text-anchor="middle" fill="var(--muted)" font-family="JetBrains Mono" font-size="8">Listeners + Connectors</text>
+
+    <text x="120" y="318" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="9" font-weight="600">:9080</text>
+
+    <!-- Bookinfo pods (outside, right) - reviews-v2 HIGHLIGHTED -->
+    <rect x="225" y="182" width="185" height="160" rx="6" fill="var(--panel)" stroke="var(--white)" stroke-width="1.5"/>
+    <text x="317" y="204" text-anchor="middle" fill="var(--white)" font-family="DM Sans" font-size="12" font-weight="700">Bookinfo Pods</text>
+
+    <rect x="237" y="215" width="78" height="26" rx="4" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+    <text x="276" y="232" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="9">productpage</text>
+
+    <!-- reviews-v2 HIGHLIGHTED as target -->
+    <rect x="323" y="215" width="78" height="26" rx="4" fill="#1a1030" stroke="var(--purple)" stroke-width="2"/>
+    <text x="362" y="232" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="9" font-weight="700">reviews-v2</text>
+
+    <rect x="237" y="249" width="78" height="26" rx="4" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+    <text x="276" y="266" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="9">details</text>
+
+    <rect x="323" y="249" width="78" height="26" rx="4" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+    <text x="362" y="266" text-anchor="middle" fill="var(--white)" font-family="JetBrains Mono" font-size="9">ratings</text>
+
+    <rect x="237" y="285" width="164" height="22" rx="3" fill="var(--surface)" stroke="var(--cyan)" stroke-width="0.5" opacity="0.6"/>
+    <text x="319" y="300" text-anchor="middle" fill="var(--cyan)" font-family="JetBrains Mono" font-size="8" opacity="0.7">ztunnel (ambient mesh)</text>
+
+    <!-- ===== TRAFFIC: Direct curl (green) NLB -> Gateway -> SI -> Pods ===== -->
+    <line x1="180" y1="42" x2="180" y2="52" stroke="var(--green)" stroke-width="4" class="flow"/>
+    <line x1="180" y1="84" x2="180" y2="94" stroke="var(--green)" stroke-width="4" class="flow" marker-end="url(#a-green)"/>
+    <path d="M 180 138 L 120 180" stroke="var(--green)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-green)"/>
+    <path d="M 120 260 L 317 182" stroke="var(--green)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-green)"/>
+  </g>
+
+  <!-- ==================== SI LINK (just under SI boxes) ==================== -->
+  <line x1="420" y1="650" x2="690" y2="650" stroke="var(--purple)" stroke-width="4" class="flow" marker-end="url(#a-purple)"/>
+  <line x1="690" y1="662" x2="420" y2="662" stroke="var(--purple)" stroke-width="4" class="flow-rev" marker-end="url(#a-purple)"/>
+  <text x="555" y="686" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="11" font-weight="600">SI Link</text>
+  <text x="555" y="702" text-anchor="middle" fill="var(--muted)" font-family="JetBrains Mono" font-size="9">productpage | reviews | details | ratings</text>
+
+  <!-- ==================== CROSS-CLUSTER REVIEWS TRAFFIC ==================== -->
+
+  <!-- Amber (DNS weighted): spoke-1 SI out right -> down to SI link -> across -> up into spoke-2 SI -> reviews-v2 -->
+  <path d="M 510 535 L 510 648" stroke="var(--amber)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-amber)"/>
+  <path d="M 510 648 L 593 648" stroke="var(--amber)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-amber)"/>
+  <path d="M 593 648 L 593 535" stroke="var(--amber)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-amber)"/>
+  <path d="M 680 512 L 883 505" stroke="var(--amber)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-amber)"/>
+
+  <!-- Blue (Direct curl): spoke-1 SI out right -> down to SI link -> across -> up into spoke-2 SI -> reviews-v2 -->
+  <path d="M 510 545 L 520 660" stroke="var(--blue)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-blue)"/>
+  <path d="M 520 660 L 583 660" stroke="var(--blue)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-blue)"/>
+  <path d="M 583 660 L 583 545" stroke="var(--blue)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-blue)"/>
+  <path d="M 680 520 L 883 515" stroke="var(--blue)" stroke-width="4" fill="none" class="flow" marker-end="url(#a-blue)"/>
+
+  <!-- Label for cross-cluster reviews traffic -->
+  <text x="555" y="628" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="10" font-weight="700" class="pulse">reviews call via SI</text>
+
+</svg>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-line" style="background: var(--red);"></div><span>Hub deploys to spokes</span></div>
+  <div class="legend-item"><div class="legend-line" style="background: var(--amber);"></div><span>DNS weighted traffic (Route 53)</span></div>
+  <div class="legend-item"><div class="legend-line" style="background: var(--cyan);"></div><span>Traffic: NLB &rarr; Gateway &rarr; Pods</span></div>
+  <div class="legend-item"><div class="legend-line" style="background: var(--blue);"></div><span>Direct spoke-1</span></div>
+  <div class="legend-item"><div class="legend-line" style="background: var(--green);"></div><span>Direct spoke-2</span></div>
+  <div class="legend-item"><div class="legend-line" style="background: var(--purple);"></div><span>Service Interconnect</span></div>
+</div>
+
+</body>
+</html>
