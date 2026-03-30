@@ -3,6 +3,8 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: bookinfo
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
 spec:
   parentRefs:
   - name: {{ .Values.gateway.name }}

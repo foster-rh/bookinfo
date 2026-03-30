@@ -6,6 +6,8 @@ metadata:
   labels:
     app: reviews
     version: v1
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: {{ .Values.reviews.v1.replicas }}
   selector:
@@ -52,6 +54,8 @@ metadata:
   labels:
     app: reviews
     version: v2
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: {{ .Values.reviews.v2.replicas }}
   selector:
@@ -98,6 +102,8 @@ metadata:
   labels:
     app: reviews
     version: v3
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: {{ .Values.reviews.v3.replicas }}
   selector:

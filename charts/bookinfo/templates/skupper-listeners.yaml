@@ -5,6 +5,9 @@ apiVersion: skupper.io/v2alpha1
 kind: Listener
 metadata:
   name: {{ .name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   routingKey: {{ .name }}
   host: {{ .name }}

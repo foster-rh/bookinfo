@@ -5,6 +5,8 @@ metadata:
   labels:
     app: ratings
     version: v1
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: {{ .Values.ratings.replicas }}
   selector:

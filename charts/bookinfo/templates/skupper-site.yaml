@@ -3,6 +3,9 @@ apiVersion: skupper.io/v2alpha1
 kind: Site
 metadata:
   name: skupper-site
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   linkAccess: {{ .Values.skupper.site.linkAccess }}
 ---
@@ -11,6 +14,9 @@ apiVersion: skupper.io/v2alpha1
 kind: AccessGrant
 metadata:
   name: skupper-grant
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   redemptionsAllowed: 10
   expirationWindow: 60m
