@@ -5,7 +5,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: bookinfo-applicationset
+  name: acm-placement-dev-spoke-1
   namespace: istio-demo-team
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -83,7 +83,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: bookinfo-spoke2-applicationset
+  name: acm-placement-dev-spoke-2
   namespace: istio-demo-team
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
