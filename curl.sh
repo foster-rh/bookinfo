@@ -1,10 +1,10 @@
 #!/bin/bash
 Y="\033[33m" C="\033[36m" G="\033[32m" R="\033[31m" B="\033[1m" D="\033[2m" N="\033[0m"
 HOST="bookinfo.spoke.aws-apac.mobb.cloud"
-S1_HOST="istio-ingress-istio-system.apps.rosa.dev-spoke-1.261c.p3.openshiftapps.com"
-S2_HOST="istio-ingress-istio-system.apps.rosa.dev-spoke-2.z3u5.p3.openshiftapps.com"
-S1_NLB="a21ad0c91dd424ca4ae8ce8d00e798b0-2031152092.ap-southeast-4.elb.amazonaws.com"
-S2_NLB="ae7e617de479444d0ab6612864f96ce2-2101777276.ap-southeast-4.elb.amazonaws.com"
+S1_HOST="istio-ingress-istio-system.apps.rosa.dev-spoke-1.8gbo.p3.openshiftapps.com"
+S2_HOST="istio-ingress-istio-system.apps.rosa.dev-spoke-2.d1mp.p3.openshiftapps.com"
+S1_NLB="a7ed4afcb08b34803a8409d923b439e4-1020269966.ap-southeast-4.elb.amazonaws.com"
+S2_NLB="aa52658463d8549adb8490929828ab26-1091155275.ap-southeast-4.elb.amazonaws.com"
 
 hit() {
   local body=$(mktemp)
@@ -31,8 +31,8 @@ s1_ips=$(grep -E '^[0-9]' /tmp/dns_s1 | sort)
 s2_ips=$(grep -E '^[0-9]' /tmp/dns_s2 | sort)
 match="unknown"
 if [ -n "$dns_elb" ]; then
-  echo "$dns_elb" | grep -q "a21ad0c91dd42" && match="Spoke-1"
-  echo "$dns_elb" | grep -q "ae7e617de4794" && match="Spoke-2"
+  echo "$dns_elb" | grep -q "a7ed4afcb08b3" && match="Spoke-1"
+  echo "$dns_elb" | grep -q "aa52658463d85" && match="Spoke-2"
 else
   first_ip=$(echo "$dns_ips" | head -1)
   [ -n "$first_ip" ] && echo "$s1_ips" | grep -qF "$first_ip" && match="Spoke-1"
